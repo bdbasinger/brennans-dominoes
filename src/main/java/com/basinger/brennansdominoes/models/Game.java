@@ -4,18 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+
 public class Game {
 
     private Player player1;
     private Player player2;
-    private List<Domino> board;
-    private List<Domino> boneyard;
+    private List<Domino> boneyard; // Pile to draw from
     private Player currentPlayer; // The player whose turn it is
+    private final DominoBoard dominoBoard;
+
 
     public Game(Player player1, Player player2) {
         this.player1 = player1;
         this.player2 = player2;
-        this.board = new ArrayList<>();
+        this.dominoBoard = new DominoBoard();
+        //this.board = new ArrayList<>();
         this.boneyard = new ArrayList<>();
         // Initially, currentPlayer will be null until the game determines who plays the first move.
     }
@@ -34,14 +37,6 @@ public class Game {
 
     public void setPlayer2(Player player2) {
         this.player2 = player2;
-    }
-
-    public List<Domino> getBoard() {
-        return board;
-    }
-
-    public void setBoard(List<Domino> board) {
-        this.board = board;
     }
 
     public List<Domino> getBoneyard() {
@@ -65,7 +60,7 @@ public class Game {
         return "Game{" +
                 "player1=" + player1 +
                 ", player2=" + player2 +
-                ", board=" + board +
+                //", board=" + board +
                 ", boneyard=" + boneyard +
                 ", currentPlayer=" + currentPlayer +
                 '}';
@@ -86,4 +81,11 @@ public class Game {
     }
 
 
+    public void setGameOver(boolean b) {
+        System.out.println("PLAYER X WINS!");
+    }
+
+    public DominoBoard getDominoBoard() {
+        return this.dominoBoard;
+    }
 }

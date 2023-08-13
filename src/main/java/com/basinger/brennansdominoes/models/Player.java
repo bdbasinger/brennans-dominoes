@@ -1,6 +1,7 @@
 package com.basinger.brennansdominoes.models;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -8,12 +9,17 @@ public class Player {
 
     private String id;
     private List<Domino> hand;
-    private int score;
+    private Integer score;
+    private String playerName;
 
-    public Player(String id) {
+    public Player(String id, String playerName) {
         this.id = id;
+        this.playerName = playerName;
         this.hand = new ArrayList<>();
         this.score = 0;
+    }
+
+    public Player() {
     }
 
     public String getId() {
@@ -24,12 +30,20 @@ public class Player {
         this.id = id;
     }
 
-    public List<Domino> getHand() {
-        return hand;
+    public String getPlayerName() {
+        return playerName;
     }
 
-    public void setHand(List<Domino> hand) {
-        this.hand = hand;
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+
+    public List<Domino> getHand() {
+        return this.hand;
+    }
+
+    public void setHand(LinkedList<Domino> dominos) {
+        this.hand = dominos;
     }
 
     public int getScore() {
@@ -46,6 +60,7 @@ public class Player {
                 "id='" + id + '\'' +
                 ", hand=" + hand +
                 ", score=" + score +
+                ", playerName='" + playerName + '\'' +
                 '}';
     }
 
@@ -65,4 +80,8 @@ public class Player {
 
 
 
+    //NEED TO IMPLEMENT
+    public List<Domino> getDominoes() {
+        return this.hand;
+    }
 }

@@ -52,4 +52,18 @@ public class Domino {
         return Objects.hash(leftValue, rightValue);
     }
 
+    //NEED TO IMPLEMENT
+    public boolean isDouble() {
+        return false;
+    }
+
+    //NEED TO IMPLEMENT
+    public Integer getSide1() {
+        return 1;
+    }
+
+    //NEED TO IMPLEMENT
+    public Integer getSide2() {
+        return 1;
+    }
 }

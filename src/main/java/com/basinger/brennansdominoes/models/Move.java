@@ -1,33 +1,47 @@
 package com.basinger.brennansdominoes.models;
 
+import com.basinger.brennansdominoes.Position;
+
 import java.util.Objects;
 
 public class Move {
 
-    private String playerId; // The ID of the player making the move
+    private Integer playerId; // The ID of the player making the move
+    private Player player;
     private Domino domino;
-    private String position; // This can be "left", "right", "top", or "bottom" depending on where they want to place the domino relative to the board
+    private Position trainPosition; // This can be "left", "right", "top", or "bottom" depending on where they want to place the domino relative to the board
 
 
-    public Move(String playerId, Domino domino, String position) {
-        this.playerId = playerId;
+    public Move(Player player, Domino domino, Position position) {
+        this.player = player;
         this.domino = domino;
-        this.position = position;
+        this.trainPosition = position;
     }
 
-    public Move(Domino domino, String position) {
+    public Move(Domino domino, Position position) {
         this.domino = domino;
-        this.position = position;
+        this.trainPosition = position;
+
+
+
     }
 
     public Move() {
     }
 
-    public String getPlayerId() {
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Position getTrainPosition() {
+        return trainPosition;
+    }
+
+    public Integer getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(String playerId) {
+    public void setPlayerId(Integer playerId) {
         this.playerId = playerId;
     }
 
@@ -39,12 +53,12 @@ public class Move {
         this.domino = domino;
     }
 
-    public String getPosition() {
-        return position;
+    public Position getPosition() {
+        return trainPosition;
     }
 
-    public void setPosition(String position) {
-        this.position = position;
+    public void setPosition(Position position) {
+        this.trainPosition = position;
     }
 
     @Override
@@ -52,7 +66,7 @@ public class Move {
         return "Move{" +
                 "playerId='" + playerId + '\'' +
                 ", domino=" + domino +
-                ", position='" + position + '\'' +
+                ", train='" + trainPosition + '\'' +
                 '}';
     }
 
@@ -63,12 +77,12 @@ public class Move {
         Move move = (Move) o;
         return Objects.equals(playerId, move.playerId) &&
                 Objects.equals(domino, move.domino) &&
-                Objects.equals(position, move.position);
+                Objects.equals(trainPosition, move.trainPosition);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(playerId, domino, position);
+        return Objects.hash(playerId, domino, trainPosition);
     }
 
 }
