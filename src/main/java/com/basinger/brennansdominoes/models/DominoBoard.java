@@ -1,6 +1,8 @@
 package com.basinger.brennansdominoes.models;
 
 import com.basinger.brennansdominoes.Position;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
@@ -107,6 +109,7 @@ public class DominoBoard {
 
  */
 
+@Service
     public class DominoBoard {
 
         private List<Domino> topTrain = new LinkedList<>();
@@ -118,8 +121,16 @@ public class DominoBoard {
         private Domino lastBottomDomino;
         private Domino lastLeftDomino;
         private Domino lastRightDomino;
+        private Domino centralDomino;
 
 
+        public Domino getCentralDomino() {
+            return centralDomino;
+        }
+
+        public void setCentralDomino(Domino centralDomino) {
+            this.centralDomino = centralDomino;
+        }
 
         public void addToTopTrain(Domino domino) {
             topTrain.add(domino);

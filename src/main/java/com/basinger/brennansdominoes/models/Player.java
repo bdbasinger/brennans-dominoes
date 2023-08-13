@@ -1,21 +1,25 @@
 package com.basinger.brennansdominoes.models;
 
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+
+@Component
 public class Player {
 
     private String id;
-    private List<Domino> hand;
+    private LinkedList<Domino> hand;
     private Integer score;
     private String playerName;
 
     public Player(String id, String playerName) {
         this.id = id;
         this.playerName = playerName;
-        this.hand = new ArrayList<>();
+        this.hand = new LinkedList<>();
         this.score = 0;
     }
 

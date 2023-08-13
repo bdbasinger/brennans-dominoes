@@ -1,8 +1,10 @@
 package com.basinger.brennansdominoes.models;
 
 import com.basinger.brennansdominoes.Position;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
+
 
 public class Move {
 
@@ -21,9 +23,6 @@ public class Move {
     public Move(Domino domino, Position position) {
         this.domino = domino;
         this.trainPosition = position;
-
-
-
     }
 
     public Move() {

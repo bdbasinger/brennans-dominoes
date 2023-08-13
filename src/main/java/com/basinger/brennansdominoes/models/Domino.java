@@ -54,7 +54,7 @@ public class Domino {
 
     //NEED TO IMPLEMENT
     public boolean isDouble() {
-        return false;
+        return this.leftValue == this.rightValue;
     }
 
     //NEED TO IMPLEMENT

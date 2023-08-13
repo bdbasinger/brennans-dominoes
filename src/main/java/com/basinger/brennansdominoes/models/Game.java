@@ -1,10 +1,13 @@
 package com.basinger.brennansdominoes.models;
 
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 
+@Component
 public class Game {
 
     private Player player1;
@@ -12,6 +15,8 @@ public class Game {
     private List<Domino> boneyard; // Pile to draw from
     private Player currentPlayer; // The player whose turn it is
     private final DominoBoard dominoBoard;
+
+
 
 
     public Game(Player player1, Player player2) {

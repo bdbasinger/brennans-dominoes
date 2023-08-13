@@ -2,14 +2,18 @@ package com.basinger.brennansdominoes.services;
 
 import com.basinger.brennansdominoes.Position;
 import com.basinger.brennansdominoes.models.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class GameService {
+
+    //Only need once instance of the game class at a time for now...
+    @Autowired
+    private Game game;
 
     public Game startNewGame() {
 
@@ -24,6 +28,7 @@ public class GameService {
         System.out.println("Player 1's Dominoes: " + game.getPlayer1().getHand().toString());
         System.out.println("Player 2's Dominoes: " + game.getPlayer2().getHand().toString());
 
+        // Set up the Draw From Pile
         game.setBoneyard(new LinkedList<>(shuffledDominoes.subList(14,28)));
 
         System.out.println("Boneyard Dominoes: " + game.getBoneyard().toString());
@@ -41,11 +46,17 @@ public class GameService {
             throw new IllegalArgumentException("It's not this player's turn");
         }
 
+        //If
+
         // 2. Validate if the move is legal
         List<Domino> playableDominoes = computePlayableDominoes(game);  // Assuming you've a method to compute playable dominoes
+
+
         if (!playableDominoes.contains(domino)) {
+            // Player will have to draw from the boneyard instead of throwing this exception
             throw new IllegalArgumentException("Invalid move");
         }
+
 
         // 3. Update the board with the new domino
         game.getDominoBoard().addToBottomTrain(domino);
@@ -76,6 +87,8 @@ public class GameService {
     }
 
 
+
+
     public Game checkGameOver(Game game) {
         // Check for game over condition
         if(game.getPlayer1().getScore() >= 100 || game.getPlayer2().getScore() >= 100) {
@@ -95,7 +108,6 @@ public class GameService {
                 dominoes.add(new Domino(i, j));
             }
         }
-
         //shuffle them up a little bit
         Collections.shuffle(dominoes);
         //voila
@@ -104,31 +116,79 @@ public class GameService {
 
 
     private void initializeBoardWithHighestDouble(Game game) {
-        Domino highestDouble = null;
-        Player playerWithHighestDouble = null;
 
-        for(Domino d : game.getPlayer1().getDominoes()) {
-            if(d.isDouble() && (highestDouble == null || d.getLeftValue() > highestDouble.getLeftValue())) {
-                highestDouble = d;
-                playerWithHighestDouble = game.getPlayer1();
-            }
+        // Find both the highest double domino and the player that has it - could return null
+        PlayerDominoPair playerDominoPair = getHighestDoubleFromBothHands(
+                game.getPlayer1(),
+                (LinkedList<Domino>) game.getPlayer1().getHand(),
+                game.getPlayer2(),
+                (LinkedList<Domino>) game.getPlayer2().getHand()
+        );
+
+        // If there are no doubles found in either players hands
+        if (playerDominoPair == null)
+            // Set the current player to be player1
+            game.setCurrentPlayer(game.getPlayer1());
+        else {
+            // If we found the player with the highest double domino
+            Player playerWithHighestDouble = playerDominoPair.getPlayer();
+            Domino highestDouble = playerDominoPair.getDomino();
+            // Keep a record of the central piece on the domino board
+            game.getDominoBoard().setCentralDomino(highestDouble);
+
+
         }
 
-        for(Domino d : game.getPlayer2().getDominoes()) {
-            if(d.isDouble() && (highestDouble == null || d.getLeftValue() > highestDouble.getLeftValue())) {
-                highestDouble = d;
-                playerWithHighestDouble = game.getPlayer2();
-            }
-        }
 
         // If found, place the highest double on the board and adjust the score
+
+
+
+/*        // If found, place the highest double on the board and adjust the score
+
         if(highestDouble != null) {
             game.getDominoBoard().addToTopTrain(highestDouble);
             playerWithHighestDouble.getDominoes().remove(highestDouble);
             playerWithHighestDouble.setScore(playerWithHighestDouble.getScore() + 2 * highestDouble.getLeftValue());
+        }*/
+    }
+
+    private Domino computeHighestDouble(LinkedList<Domino> hand) {
+        return hand.stream()
+                .filter(Domino::isDouble)
+                .max(Comparator.comparing(Domino::getLeftValue)) // since it's a double, we can use either left or right value for comparison
+                .orElse(null); // returns null if no double is found
+    }
+
+    public PlayerDominoPair getHighestDoubleFromBothHands(Player player1, LinkedList<Domino> hand1, Player player2, LinkedList<Domino> hand2) {
+        Domino highestDoubleHand1 = computeHighestDouble(hand1);
+        Domino highestDoubleHand2 = computeHighestDouble(hand2);
+
+        if(highestDoubleHand1 != null)
+            System.out.println("Highest Double in hand 1: " + highestDoubleHand1);
+        if(highestDoubleHand2 != null)
+            System.out.println("Highest Double in hand 2: " + highestDoubleHand2);
+
+
+        // Now, we'll compare the highest doubles from both hands to get the overall highest.
+        if (highestDoubleHand1 == null && highestDoubleHand2 == null) {
+            return null; // no doubles in both hands
+        } else if (highestDoubleHand1 == null) {
+            return new PlayerDominoPair(player2, highestDoubleHand2);
+        } else if (highestDoubleHand2 == null) {
+            return new PlayerDominoPair(player1, highestDoubleHand1);
+        } else {
+            if (highestDoubleHand1.getLeftValue() >= highestDoubleHand2.getLeftValue()) {
+                return new PlayerDominoPair(player1, highestDoubleHand1);
+            } else {
+                return new PlayerDominoPair(player2, highestDoubleHand2);
+            }
         }
     }
 
-    // You can add other helper methods or logic as needed.
+
+
+
+    // add other helper methods or logic as needed.
 }
 
